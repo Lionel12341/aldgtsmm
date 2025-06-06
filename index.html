@@ -1,334 +1,210 @@
-`<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>SMM Panel Indosmm.id</title>
+<title>SMM Panel Indosmm.id - Tanpa Login</title>
 <style>
   body {
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #1565c0, #42a5f5);
-    color: #fff;
+    font-family: Arial, sans-serif;
+    background: #f4f7fc;
     margin: 0; padding: 0;
   }
   .container {
     max-width: 480px;
-    margin: 40px auto;
-    background: rgba(255 255 255 / 0.1);
-    padding: 24px;
-    border-radius: 12px;
-    box-shadow: 0 8px 24px rgb(0 0 0 / 0.3);
+    margin: 30px auto;
+    background: white;
+    padding: 20px 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 8px #ccc;
   }
-  h1 {
-    text-align: center;
-    margin-bottom: 20px;
+  h2 { text-align:center; color: #1565c0; }
+  label {
+    font-weight: bold;
+    display: block;
+    margin-top: 15px;
   }
   input, select, button {
     width: 100%;
-    margin: 8px 0 16px 0;
     padding: 10px;
-    border-radius: 8px;
-    border: none;
-    font-size: 16px;
+    margin: 8px 0 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
   }
   button {
-    background-color: #0d47a1;
+    background: #1565c0;
     color: white;
+    border: none;
     cursor: pointer;
-    font-weight: 600;
-    transition: background-color 0.3s;
+    font-size: 16px;
   }
   button:hover {
-    background-color: #1565c0;
+    background: #0d3f8a;
   }
-  .hidden { display: none; }
-  .error { color: #ff8a80; margin-bottom: 12px; }
-  .success { color: #a5d6a7; margin-bottom: 12px; }
-  label {
-    font-weight: 600;
+  .error {
+    color: red;
+    font-size: 14px;
   }
-  nav {
-    margin-bottom: 20px;
-    display: flex;
-    justify-content: space-around;
+  .success {
+    color: green;
+    font-size: 14px;
   }
-  nav button {
-    width: auto;
-    padding: 8px 16px;
+  .order-list {
+    margin-top: 20px;
   }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 12px;
-  }
-  table, th, td {
-    border: 1px solid #ffffff80;
-  }
-  th, td {
-    padding: 8px;
-    text-align: left;
+  .order-item {
+    border-bottom: 1px solid #eee;
+    padding: 8px 0;
   }
 </style>
 </head>
 <body>
-
 <div class="container">
-  <h1>SMM Panel Indosmm.id</h1>
+  <h2>SMM Panel Indosmm.id - Order & Cek Status</h2>
 
-  <nav>
-    <button id="nav-login">Login</button>
-    <button id="nav-order" class="hidden">Order</button>
-    <button id="nav-status" class="hidden">Status Order</button>
-    <button id="nav-logout" class="hidden" style="background:#b71c1c;">Logout</button>
-  </nav>
+  <form id="orderForm">
+    <label for="username">Username (bebas, untuk tracking order)</label>
+    <input type="text" id="username" name="username" placeholder="Masukkan username" required />
 
-  <!-- Login Form -->
-  <div id="page-login">
-    <div id="login-msg" class="error"></div>
-    <label>Username</label>
-    <input type="text" id="login-user" />
-    <label>Password</label>
-    <input type="password" id="login-pass" />
-    <button id="btn-login">Login</button>
-  </div>
-
-  <!-- Order Form -->
-  <div id="page-order" class="hidden">
-    <div id="order-msg"></div>
-    <label>Layanan</label>
-    <select id="service-select">
-      <option>Loading layanan...</option>
+    <label for="service">Pilih Layanan</label>
+    <select id="service" name="service" required>
+      <option value="">Loading layanan...</option>
     </select>
-    <label>Link / Username</label>
-    <input type="text" id="order-link" placeholder="Masukkan link/username target" />
-    <label>Jumlah</label>
-    <input type="number" id="order-quantity" min="1" value="10" />
-    <button id="btn-order">Kirim Order</button>
-  </div>
 
-  <!-- Status Order -->
-  <div id="page-status" class="hidden">
-    <h3>Status Pesanan Kamu</h3>
-    <table id="status-table">
-      <thead>
-        <tr>
-          <th>ID Order</th>
-          <th>Layanan</th>
-          <th>Link</th>
-          <th>Jumlah</th>
-          <th>Status</th>
-          <th>Tanggal</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td colspan="6" style="text-align:center">Loading...</td></tr>
-      </tbody>
-    </table>
-  </div>
+    <label for="link">Link / Username / Target</label>
+    <input type="text" id="link" name="link" placeholder="Masukkan link/target" required />
+
+    <label for="quantity">Jumlah</label>
+    <input type="number" id="quantity" name="quantity" placeholder="Jumlah" min="1" required />
+
+    <button type="submit">Order Sekarang</button>
+    <div id="orderMessage"></div>
+  </form>
+
+  <hr />
+
+  <form id="statusForm">
+    <label for="statusUsername">Cek Status Order - Masukkan Username</label>
+    <input type="text" id="statusUsername" placeholder="Masukkan username untuk cek order" required />
+    <button type="submit">Cek Status</button>
+    <div id="statusMessage"></div>
+  </form>
+
+  <div class="order-list" id="orderList"></div>
 </div>
 
 <script>
-const apiBase = "api.php";
+  const API_URL = 'api.php';
 
-let currentUser = null;
-
-// Navigasi antar halaman
-const navLogin = document.getElementById('nav-login');
-const navOrder = document.getElementById('nav-order');
-const navStatus = document.getElementById('nav-status');
-const navLogout = document.getElementById('nav-logout');
-
-const pageLogin = document.getElementById('page-login');
-const pageOrder = document.getElementById('page-order');
-const pageStatus = document.getElementById('page-status');
-
-function showPage(page) {
-  pageLogin.classList.add('hidden');
-  pageOrder.classList.add('hidden');
-  pageStatus.classList.add('hidden');
-  page.classList.remove('hidden');
-}
-
-function updateNav() {
-  if(currentUser){
-    navLogin.classList.add('hidden');
-    navOrder.classList.remove('hidden');
-    navStatus.classList.remove('hidden');
-    navLogout.classList.remove('hidden');
-  } else {
-    navLogin.classList.remove('hidden');
-    navOrder.classList.add('hidden');
-    navStatus.classList.add('hidden');
-    navLogout.classList.add('hidden');
-  }
-}
-
-navLogin.onclick = () => { showPage(pageLogin); }
-navOrder.onclick = () => { showPage(pageOrder); }
-navStatus.onclick = () => { loadStatus(); showPage(pageStatus); }
-navLogout.onclick = () => {
-  currentUser = null;
-  localStorage.removeItem('smmuser');
-  updateNav();
-  showPage(pageLogin);
-}
-
-// Simpan session user sederhana di localStorage
-function setUser(user) {
-  currentUser = user;
-  localStorage.setItem('smmuser', JSON.stringify(user));
-  updateNav();
-}
-
-function getUser() {
-  const u = localStorage.getItem('smmuser');
-  if(u) return JSON.parse(u);
-  return null;
-}
-
-// Load session user kalau ada
-window.onload = () => {
-  const u = getUser();
-  if(u) {
-    currentUser = u;
-    updateNav();
-    showPage(pageOrder);
-    loadServices();
-  } else {
-    showPage(pageLogin);
-  }
-};
-
-// Login
-document.getElementById('btn-login').onclick = async () => {
-  const user = document.getElementById('login-user').value.trim();
-  const pass = document.getElementById('login-pass').value.trim();
-  const loginMsg = document.getElementById('login-msg');
-  loginMsg.textContent = "";
-
-  if(!user || !pass){
-    loginMsg.textContent = "Username dan password tidak boleh kosong!";
-    return;
+  // Ambil daftar layanan dari API
+  async function loadServices() {
+    const res = await fetch(API_URL + '?action=services');
+    const json = await res.json();
+    const serviceSelect = document.getElementById('service');
+    serviceSelect.innerHTML = '';
+    if(json.success && json.services){
+      json.services.forEach(s => {
+        const opt = document.createElement('option');
+        opt.value = s.service;
+        opt.textContent = s.name + ' - Rp ' + s.price;
+        serviceSelect.appendChild(opt);
+      });
+    } else {
+      const opt = document.createElement('option');
+      opt.value = '';
+      opt.textContent = 'Gagal memuat layanan';
+      serviceSelect.appendChild(opt);
+    }
   }
 
-  const res = await fetch(apiBase + '?action=login', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({username: user, password: pass})
+  // Submit order
+  document.getElementById('orderForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const username = document.getElementById('username').value.trim();
+    const service = document.getElementById('service').value;
+    const link = document.getElementById('link').value.trim();
+    const quantity = parseInt(document.getElementById('quantity').value);
+
+    const orderMessage = document.getElementById('orderMessage');
+    orderMessage.textContent = '';
+    orderMessage.className = '';
+
+    if(!username || !service || !link || quantity < 1){
+      orderMessage.textContent = 'Semua data harus diisi dengan benar.';
+      orderMessage.className = 'error';
+      return;
+    }
+
+    try {
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({action:'order', username, service, link, quantity})
+      });
+      const json = await res.json();
+      if(json.success){
+        orderMessage.textContent = 'Order berhasil dibuat. Order ID: ' + json.order_id;
+        orderMessage.className = 'success';
+      } else {
+        orderMessage.textContent = 'Gagal order: ' + json.message;
+        orderMessage.className = 'error';
+      }
+    } catch(err) {
+      orderMessage.textContent = 'Kesalahan: ' + err.message;
+      orderMessage.className = 'error';
+    }
   });
-  const data = await res.json();
 
-  if(data.success){
-    setUser({username: user});
-    loginMsg.textContent = "";
-    loadServices();
-    showPage(pageOrder);
-  } else {
-    loginMsg.textContent = data.message || "Login gagal";
-  }
-}
+  // Cek status order
+  document.getElementById('statusForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const username = document.getElementById('statusUsername').value.trim();
+    const statusMessage = document.getElementById('statusMessage');
+    const orderList = document.getElementById('orderList');
+    statusMessage.textContent = '';
+    statusMessage.className = '';
+    orderList.innerHTML = '';
 
-// Load daftar layanan dari api.php (yang fetch ke Indosmm)
-async function loadServices(){
-  const sel = document.getElementById('service-select');
-  sel.innerHTML = "<option>Loading layanan...</option>";
+    if(!username){
+      statusMessage.textContent = 'Masukkan username untuk cek status.';
+      statusMessage.className = 'error';
+      return;
+    }
 
-  try {
-    const res = await fetch(apiBase + '?action=services');
-    const data = await res.json();
-    if(data.success && data.services){
-      sel.innerHTML = "";
-      for(const svc of data.services){
-        sel.innerHTML += `<option value="${svc.service}">${svc.name} - Rp${svc.price}</option>`;
+    try {
+      const res = await fetch(API_URL + '?action=status&username=' + encodeURIComponent(username));
+      const json = await res.json();
+      if(json.success){
+        if(json.orders.length === 0){
+          statusMessage.textContent = 'Tidak ada order ditemukan untuk username ini.';
+          statusMessage.className = 'error';
+          return;
+        }
+        statusMessage.textContent = 'Menampilkan status order untuk: ' + username;
+        statusMessage.className = 'success';
+        json.orders.forEach(o => {
+          const div = document.createElement('div');
+          div.className = 'order-item';
+          div.innerHTML = `<strong>Order ID:</strong> ${o.order_id}<br>
+            <strong>Layanan:</strong> ${o.service_name || o.service}<br>
+            <strong>Link/Target:</strong> ${o.link}<br>
+            <strong>Jumlah:</strong> ${o.quantity}<br>
+            <strong>Status:</strong> ${o.status}<br>
+            <small>Dibuat: ${o.created_at}</small>`;
+          orderList.appendChild(div);
+        });
+      } else {
+        statusMessage.textContent = 'Gagal mengambil status: ' + json.message;
+        statusMessage.className = 'error';
       }
-    } else {
-      sel.innerHTML = "<option>Tidak ada layanan</option>";
+    } catch(err) {
+      statusMessage.textContent = 'Kesalahan: ' + err.message;
+      statusMessage.className = 'error';
     }
-  } catch {
-    sel.innerHTML = "<option>Gagal memuat layanan</option>";
-  }
-}
+  });
 
-// Kirim order
-document.getElementById('btn-order').onclick = async () => {
-  const service = document.getElementById('service-select').value;
-  const link = document.getElementById('order-link').value.trim();
-  const quantity = document.getElementById('order-quantity').value;
-  const orderMsg = document.getElementById('order-msg');
-
-  orderMsg.textContent = "";
-  orderMsg.className = "";
-
-  if(!service || !link || quantity <= 0){
-    orderMsg.textContent = "Semua data harus diisi dengan benar.";
-    orderMsg.className = "error";
-    return;
-  }
-
-  if(!currentUser){
-    orderMsg.textContent = "Silakan login terlebih dahulu.";
-    orderMsg.className = "error";
-    return;
-  }
-
-  try {
-    const res = await fetch(apiBase + '?action=order', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        username: currentUser.username,
-        service,
-        link,
-        quantity
-      })
-    });
-    const data = await res.json();
-    if(data.success){
-      orderMsg.textContent = "Order berhasil dibuat, ID Order: " + data.order_id;
-      orderMsg.className = "success";
-      document.getElementById('order-link').value = "";
-      document.getElementById('order-quantity').value = 10;
-    } else {
-      orderMsg.textContent = data.message || "Order gagal.";
-      orderMsg.className = "error";
-    }
-  } catch (e) {
-    orderMsg.textContent = "Terjadi kesalahan saat membuat order.";
-    orderMsg.className = "error";
-  }
-}
-
-// Load status order user
-async function loadStatus(){
-  if(!currentUser) return;
-
-  const tbody = document.querySelector("#status-table tbody");
-  tbody.innerHTML = "<tr><td colspan='6' style='text-align:center'>Loading...</td></tr>";
-
-  try {
-    const res = await fetch(apiBase + '?action=status&username=' + encodeURIComponent(currentUser.username));
-    const data = await res.json();
-
-    if(data.success && data.orders && data.orders.length){
-      tbody.innerHTML = "";
-      for(const o of data.orders){
-        tbody.innerHTML += `<tr>
-          <td>${o.order_id}</td>
-          <td>${o.service_name}</td>
-          <td>${o.link}</td>
-          <td>${o.quantity}</td>
-          <td>${o.status}</td>
-          <td>${o.created_at}</td>
-        </tr>`;
-      }
-    } else {
-      tbody.innerHTML = "<tr><td colspan='6' style='text-align:center'>Tidak ada order.</td></tr>";
-    }
-  } catch {
-    tbody.innerHTML = "<tr><td colspan='6' style='text-align:center'>Gagal memuat status order.</td></tr>";
-  }
-}
+  loadServices();
 </script>
-
 </body>
 </html>
