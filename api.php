@@ -126,7 +126,7 @@ class Api
 header('Content-Type: application/json');
 
 $api = new Api();
-$api->api_key = 'ISI_API_KEY_KAMU_DI_SINI'; // Ganti API Key di sini juga jika perlu
+$api->api_key = 'e883ea1e43756537f7ab6ffce9d262e0'; // Ganti API Key di sini juga jika perlu
 
 $action = $_POST['action'] ?? $_GET['action'] ?? '';
 
