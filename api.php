@@ -1,8 +1,8 @@
 <?php
 header('Content-Type: application/json');
 
-$API_KEY = 'API_KEY_INDOSMM_KAMU'; // Ganti dengan API key indosmm.id asli
-$API_URL = 'https://indosmm.id/api/json.php';
+$API_KEY = 'e883ea1e43756537f7ab6ffce9d262e0'; // Ganti dengan API key indosmm.id asli
+$API_URL = 'https://indosmm.id/api/v2';
 
 $action = $_GET['action'] ?? '';
 
