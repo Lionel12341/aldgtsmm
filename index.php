@@ -35,6 +35,7 @@
     }
     .card p {
       line-height: 1.6;
+      white-space: pre-line;
     }
     .date {
       font-size: 0.9em;
@@ -50,17 +51,22 @@
   </header>
   <div class="container">
     <?php
-    $posts = file_exists("posts.json") ? json_decode(file_get_contents("posts.json"), true) : [];
-    if (!$posts) {
-      echo "<p>Belum ada artikel.</p>";
-    } else {
-      foreach ($posts as $post) {
-        echo "<div class='card'>";
-        echo "<h2>" . htmlspecialchars($post['judul']) . "</h2>";
-        echo "<div class='date'>" . htmlspecialchars($post['tanggal']) . "</div>";
-        echo "<p>" . nl2br(htmlspecialchars($post['konten'])) . "</p>";
-        echo "</div>";
+    $file = "posts.json";
+    if (file_exists($file)) {
+      $posts = json_decode(file_get_contents($file), true);
+      if (is_array($posts) && count($posts) > 0) {
+        foreach ($posts as $post) {
+          echo "<div class='card'>";
+          echo "<h2>" . htmlspecialchars($post['judul']) . "</h2>";
+          echo "<div class='date'>" . htmlspecialchars($post['tanggal']) . "</div>";
+          echo "<p>" . htmlspecialchars($post['konten']) . "</p>";
+          echo "</div>";
+        }
+      } else {
+        echo "<p>Tidak ada postingan ditemukan.</p>";
       }
+    } else {
+      echo "<p>File posts.json tidak ditemukan.</p>";
     }
     ?>
   </div>
