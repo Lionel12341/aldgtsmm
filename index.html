@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>AI Blog Harian</title>
+  <style>
+    body { font-family: sans-serif; max-width: 800px; margin: auto; padding: 20px; }
+    h1 { color: #1565c0; }
+    article { margin-bottom: 40px; }
+    small { color: gray; }
+  </style>
+</head>
+<body>
+  <h1>Blog AI Harian</h1>
+  <div id="blog"></div>
+  <script>
+    fetch('/posts.json')
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById("blog");
+        data.forEach(post => {
+          container.innerHTML += `
+            <article>
+              <h2>${post.judul}</h2>
+              <small>${post.tanggal}</small>
+              <p>${post.konten.replace(/\n/g, "<br>")}</p>
+            </article>`;
+        });
+      });
+  </script>
+</body>
+</html>
