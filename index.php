@@ -1,3 +1,5 @@
+<?php include_once "auto_write.php"; ?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
