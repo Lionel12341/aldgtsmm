@@ -1,31 +1,77 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>AI Blog Harian</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog AI Harian</title>
   <style>
-    body { font-family: sans-serif; max-width: 800px; margin: auto; padding: 20px; }
-    h1 { color: #1565c0; }
-    article { margin-bottom: 40px; }
-    small { color: gray; }
+    body {
+      font-family: sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #1565c0;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    main {
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
+      background: white;
+    }
+    article {
+      margin-bottom: 40px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 20px;
+    }
+    article h2 {
+      color: #1565c0;
+    }
+    article small {
+      color: gray;
+    }
   </style>
 </head>
 <body>
-  <h1>Blog AI Harian</h1>
-  <div id="blog"></div>
+  <header>
+    <h1>Blog AI Harian</h1>
+    <p>Artikel otomatis ditulis oleh AI setiap hari</p>
+  </header>
+  <main id="blog">
+    <p>Memuat artikel...</p>
+  </main>
+
   <script>
     fetch('/posts.json')
-      .then(res => res.json())
+      .then(response => {
+        if (!response.ok) throw new Error("Gagal mengambil artikel.");
+        return response.json();
+      })
       .then(data => {
-        const container = document.getElementById("blog");
+        const blogContainer = document.getElementById('blog');
+        blogContainer.innerHTML = '';
+
+        if (data.length === 0) {
+          blogContainer.innerHTML = '<p>Belum ada artikel ditulis.</p>';
+          return;
+        }
+
         data.forEach(post => {
-          container.innerHTML += `
-            <article>
-              <h2>${post.judul}</h2>
-              <small>${post.tanggal}</small>
-              <p>${post.konten.replace(/\n/g, "<br>")}</p>
-            </article>`;
+          const article = document.createElement('article');
+          article.innerHTML = `
+            <h2>${post.judul}</h2>
+            <small>${post.tanggal}</small>
+            <p>${post.konten.replace(/\n/g, "<br>")}</p>
+          `;
+          blogContainer.appendChild(article);
         });
+      })
+      .catch(err => {
+        document.getElementById('blog').innerHTML = `<p style="color:red;">${err.message}</p>`;
       });
   </script>
 </body>
